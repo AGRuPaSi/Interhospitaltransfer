@@ -1,0 +1,124 @@
+# interhospitaltransfer
+
+Eine Progressive Web App (PWA) zur Erfassung und Evaluation von Interhospital-Transfers.
+Die App funktioniert offline, speichert lokal (IndexedDB) und bietet eine strukturierte PDF-Export-Funktion.
+
+---
+
+## Features
+
+- Multi-Step Formular für Patientendaten, Transferdetails und klinischen Zustand
+- Lokale Datenspeicherung in IndexedDB (browserbasiert)
+- Export von Datensätzen als strukturierte PDF
+- Offlinefähig dank Service Worker und App-Cache
+- Installierbar auf iOS und Android (Add to Homescreen)
+
+---
+
+## Projektstruktur
+
+```
+├── index.html          # Haupt-HTML-Seite
+├── style.css           # Haupt-Stylesheet
+├── main.js             # Einstiegspunkt (modular)
+├── form-template.html  # HTML-Template für Formulare
+├── manifest.json       # Web App Manifest (Homescreen-Support)
+├── service-worker.js   # Service Worker (Caching / Offline Support)
+├── libs/
+│   └── jspdf.umd.min.js    # Lokale jsPDF Bibliothek für PDF-Generierung
+├── ressources/
+│   ├── db.js              # IndexedDB-Handling
+│   ├── entryhandler.js    # Listenansicht und Löschlogik
+│   ├── formhandler.js     # Formularlogik und Validierung
+│   ├── navigation.js      # Navigation zwischen Formular und Liste
+│   └── pdfhandler.js      # PDF-Export Logik
+```
+
+---
+
+## Installation
+
+### Lokale Nutzung
+
+1. Projekt klonen:
+
+```bash
+git clone https://github.com/schradern/interhospitaltransfer.git
+cd interhospitaltransfer
+```
+
+2. Lokalen Server starten (z.B. mit Python):
+
+```bash
+python3 -m http.server
+```
+
+Dann im Browser öffnen: http://localhost:8000
+
+Hinweis: Service Worker funktionieren nur über HTTPS oder localhost.
+
+### Nutzung auf dem iPhone ohne Internet
+
+1. Die App einmal mit bestehender Verbindung über Safari öffnen (lokaler Server wie oben, oder ein Hosting per HTTPS, z. B. GitHub Pages). Der Service Worker lädt dabei alle App-Dateien (HTML, CSS, JS, PDF-Bibliothek) einmalig in den Cache des Geräts.
+2. In Safari über das Teilen-Symbol **"Zum Home-Bildschirm"** wählen. Dadurch wird die App als eigenständiges Symbol installiert und startet ohne Safari-Oberfläche.
+3. Ab diesem Zeitpunkt funktioniert die App vollständig offline – auch im Flugmodus. Da alle Daten ausschließlich lokal in der IndexedDB des Geräts gespeichert werden, ist für Erfassung, PDF-Export und das Verwalten bestehender Transfers keine Internetverbindung mehr nötig.
+4. Nach Code-Änderungen einmal mit bestehender Internet-/WLAN-Verbindung neu öffnen, damit der Service Worker die aktualisierten Dateien nachlädt.
+
+---
+
+## Technologien
+
+- Vanilla JavaScript (ES6+ Module)
+- HTML5 / CSS3
+- IndexedDB (lokale Speicherung)
+- Service Worker API
+- jsPDF (PDF-Generierung)
+
+---
+
+## Autor
+
+Dr. med. Nikolas B. Schrader  
+[medizin.dev](https://www.medizin.dev)
+
+---
+
+## Lizenz
+
+Dieses Projekt ist lizenziert unter der [Creative Commons Namensnennung - Nicht kommerziell - Weitergabe unter gleichen Bedingungen 4.0 International Lizenz (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/).
+
+Kurzfassung:
+- Namensnennung erforderlich: "Dr. med. Nikolas B. Schrader – medizin.dev"
+- Keine kommerzielle Nutzung erlaubt
+- Änderungen und Weiterentwicklungen müssen unter denselben Bedingungen weitergegeben werden
+- Vollständige Lizenz anzeigen: https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+(c) 2025 Dr. med. Nikolas B. Schrader
+
+---
+
+## Drittanbieter-Lizenzen
+
+Dieses Projekt verwendet folgende externe Bibliothek:
+
+- jsPDF (https://github.com/parallax/jsPDF)  
+  Lizenz: MIT License  
+  Copyright (c) 2010-2021  
+  James Hall, yWorks GmbH, Lukas Holländer, Aras Abbasi und weitere Mitwirkende
+
+Hinweis: Der vollständige Lizenztext ist innerhalb der Datei `libs/jspdf.umd.min.js` enthalten.
+
+---
+
+## Funktionsweise & Datenschutz
+
+- Alle erfassten Daten (Patientendaten, Transferinformationen) werden ausschließlich lokal im Browser des Nutzers gespeichert, über IndexedDB.
+- Es erfolgt keine Datenübertragung an Server oder Dritte.
+- Die App funktioniert vollständig offline.
+- Exportierte PDF-Dokumente werden lokal erstellt und gespeichert.
+- Löschung von Datensätzen erfolgt manuell durch den Nutzer.
+- Keine Verwendung von Cookies, Trackern oder externen Analyse-Tools.
+- Alle Daten werden ausschließlich lokal auf Ihrem Gerät bzw. im Browser gespeichert.
+- Beim Löschen des Browser-Cache, bei Zurücksetzen des Gerätes oder der IndexedDB können lokal gespeicherte Daten unwiederbringlich verloren gehen.
+- Der Anwender ist eigenverantwortlich für die ordnungsgemäße Handhabung und Speicherung personenbezogener Daten. Insbesondere ist der Anwender verpflichtet, alle anwendbaren Datenschutzgesetze (z.B. DSGVO) einzuhalten.
+- Diese Webanwendung dient ausschließlich der unterstützenden Erfassung von Verlegungsanfragen. Sie ersetzt keine medizinische Dokumentation im Sinne gesetzlicher Vorschriften. Für die korrekte Erfassung, Aufbewahrung und Sicherung von Patientendaten bleibt der Anwender verantwortlich.

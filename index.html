@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Interhospitaltransfer</title>
+
+  <meta name="description" content="Formular zur Evaluation eines Interhospitaltransfers">
+  <meta name="theme-color" content="#12395c">
+
+  <!-- iOS: Installation als eigenständige App ohne Safari-Oberfläche -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Transfer">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="layout">
+    <header class="nav">
+      <div class="nav-leading">
+        <button id="navBack" type="button">Zurück</button>
+      </div>
+      <div class="nav-title" id="navTitle">
+        <img class="app-icon" src="icons/icon-192.png" alt="" width="22" height="22">
+        <span id="navTitleText">Interhospitaltransfer</span>
+      </div>
+      <div class="nav-trailing">
+        <button id="navDownload" class="hidden" type="button">PDF</button>
+        <button id="navAdd" type="button">Neu</button>
+      </div>
+    </header>
+
+    <main>
+      <div id="app"></div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-note">
+        <a href="#" id="legalLink">Nutzungshinweis</a>
+        <span class="footer-sep">&middot;</span>
+        Version 1.0 &middot; <a href="https://www.medizin.dev" target="_blank" rel="noopener">Dr. med. Nikolas B. Schrader</a>
+      </div>
+    </footer>
+
+    <div id="legalBackdrop"></div>
+    <div id="legalPopover" role="dialog" aria-modal="true" aria-labelledby="legalTitle">
+      <p id="legalTitle"><strong>Nutzungshinweis: Interhospitaltransfer App</strong></p>
+      <p>Durch Nutzung der Anwendung akzeptieren Sie die folgenden Bedingungen:</p>
+      <ul>
+        <li>Beim Löschen des Browser-Cache, Zurücksetzen des Gerätes oder der IndexedDB können lokal gespeicherte Daten unwiederbringlich verloren gehen.</li>
+        <li>Der Anwender ist eigenverantwortlich für die Handhabung und Speicherung personenbezogener Daten (insbesondere Einhaltung der DSGVO).</li>
+        <li>Diese Webanwendung dient ausschließlich der unterstützenden Erfassung von Verlegungsanfragen. Sie ersetzt keine medizinische Dokumentation im Sinne gesetzlicher Vorschriften. Für die korrekte Erfassung, Aufbewahrung und Sicherung von Patientendaten bleibt der Anwender verantwortlich.</li>
+        <li>Die Nutzung erfolgt auf eigene Verantwortung. Es wird keine Gewähr für Vollständigkeit, Verfügbarkeit und Fehlerfreiheit übernommen.</li>
+      </ul>
+      <p>Weitere Informationen und Source-Code: <a href="https://github.com/schradern/interhospitaltransfer" target="_blank" rel="noopener">GitHub Projektseite</a></p>
+      <p class="legal-actions">
+        <button id="legalCloseBtn" type="button" class="btn-primary">Schließen</button>
+      </p>
+    </div>
+  </div>
+
+  <script src="libs/jspdf.umd.min.js"></script>
+  <script type="module" src="main.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js')
+          .then(registration => console.log('Service Worker registriert:', registration.scope))
+          .catch(error => console.error('Service Worker Registrierung fehlgeschlagen:', error));
+      });
+    }
+
+    const legalLink = document.getElementById('legalLink');
+    const legalPopover = document.getElementById('legalPopover');
+    const legalBackdrop = document.getElementById('legalBackdrop');
+    const legalCloseBtn = document.getElementById('legalCloseBtn');
+
+    function openLegal(event) {
+      event.preventDefault();
+      legalPopover.style.display = 'block';
+      legalBackdrop.style.display = 'block';
+    }
+
+    function closeLegal() {
+      legalPopover.style.display = 'none';
+      legalBackdrop.style.display = 'none';
+    }
+
+    legalLink.addEventListener('click', openLegal);
+    legalCloseBtn.addEventListener('click', closeLegal);
+    legalBackdrop.addEventListener('click', closeLegal);
+  </script>
+</body>
+</html>
